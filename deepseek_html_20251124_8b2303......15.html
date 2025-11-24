@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Postpartum Adaptations Flashcards</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            min-height: 100vh;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            height: 95vh;
+            max-height: 95vh;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" opacity="0.1"><path d="M30,30 Q50,10 70,30 T90,50 T70,70 T50,90 T30,70 T10,50 T30,30 Z" fill="white"/></svg>');
+        }
+        
+        .header h1 {
+            font-size: clamp(1.3rem, 4vw, 1.8rem);
+            margin-bottom: 8px;
+            position: relative;
+        }
+        
+        .header .subtitle {
+            font-size: clamp(0.8rem, 2.5vw, 1rem);
+            opacity: 0.9;
+            position: relative;
+        }
+        
+        .progress {
+            background: #3c0a8c;
+            height: 8px;
+            width: 100%;
+            flex-shrink: 0;
+        }
+        
+        .progress-bar {
+            background: linear-gradient(90deg, #6a11cb, #2575fc);
+            height: 100%;
+            width: 0%;
+            transition: width 0.4s ease;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .flashcard {
+            padding: clamp(10px, 3vw, 20px);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: #f8f9fa;
+            overflow-y: auto;
+        }
+        
+        .question-container {
+            display: flex;
+            gap: clamp(10px, 2vw, 15px);
+            align-items: flex-start;
+            margin-bottom: clamp(10px, 2vw, 15px);
+        }
+        
+        .question-icon {
+            background: #6a11cb;
+            color: white;
+            width: clamp(35px, 8vw, 50px);
+            height: clamp(35px, 8vw, 50px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            font-weight: bold;
+            flex-shrink: 0;
+            box-shadow: 0 4px 8px rgba(106, 17, 203, 0.3);
+        }
+        
+        .question {
+            font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+            line-height: 1.6;
+            color: #2c3e50;
+            flex-grow: 1;
+            font-weight: 500;
+        }
+        
+        .multiple-select-indicator {
+            background: #e74c3c;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-left: 10px;
+            white-space: nowrap;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: clamp(6px, 1.5vw, 10px);
+            margin-bottom: clamp(10px, 2vw, 20px);
+            flex: 1;
+        }
+        
+        .option {
+            padding: clamp(10px, 2vw, 14px) clamp(12px, 2.5vw, 18px);
+            border: 2px solid #e0e7ff;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+            display: flex;
+            align-items: center;
+            gap: clamp(8px, 1.5vw, 10px);
+            font-size: clamp(0.85rem, 2vw, 1rem);
+        }
+        
+        .option:hover {
+            background: #f0f4ff;
+            border-color: #a8b9ff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .option-letter {
+            background: #f0f4ff;
+            color: #2c3e50;
+            width: clamp(24px, 5vw, 28px);
+            height: clamp(24px, 5vw, 28px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+            font-size: clamp(0.75rem, 1.8vw, 0.9rem);
+        }
+        
+        /* CORRECT - ALWAYS GREEN */
+        .option.correct {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+        
+        .option.correct .option-letter {
+            background: #28a745;
+            color: white;
+        }
+        
+        /* INCORRECT - ALWAYS RED */
+        .option.incorrect {
+            background: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+        }
+        
+        .option.incorrect .option-letter {
+            background: #dc3545;
+            color: white;
+        }
+        
+        /* Remove the selected class to prevent blue highlighting */
+        
+        .feedback {
+            padding: clamp(12px, 2.5vw, 16px);
+            border-radius: 12px;
+            margin-bottom: clamp(10px, 2vw, 16px);
+            display: none;
+            align-items: center;
+            gap: clamp(8px, 1.5vw, 12px);
+            font-weight: 500;
+            font-size: clamp(0.85rem, 2vw, 1rem);
+        }
+        
+        .feedback.correct {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            color: #155724;
+            display: flex;
+        }
+        
+        .feedback.incorrect {
+            background: #f8d7da;
+            border: 2px solid #dc3545;
+            color: #721c24;
+            display: flex;
+        }
+        
+        .feedback-icon {
+            font-size: clamp(1.2rem, 3vw, 1.4rem);
+            flex-shrink: 0;
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: clamp(12px, 2.5vw, 16px) clamp(16px, 3vw, 24px);
+            background: #f0f4ff;
+            border-top: 1px solid #e0e7ff;
+            flex-shrink: 0;
+        }
+        
+        .counter {
+            font-weight: bold;
+            color: #2c3e50;
+            font-size: clamp(0.85rem, 2vw, 1rem);
+        }
+        
+        .btn {
+            padding: clamp(10px, 2vw, 12px) clamp(15px, 2.5vw, 20px);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: clamp(6px, 1vw, 8px);
+            font-size: clamp(0.8rem, 1.8vw, 0.9rem);
+            white-space: nowrap;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(106, 17, 203, 0.3);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #a8b9ff, #6a11cb);
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(168, 185, 255, 0.3);
+        }
+        
+        .rationale {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            border: 2px solid #ffd43b;
+            border-radius: 12px;
+            padding: clamp(12px, 2.5vw, 16px);
+            margin-top: clamp(8px, 1.5vw, 12px);
+            display: none;
+        }
+        
+        .rationale.show {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+        
+        .rationale h4 {
+            color: #856404;
+            margin-bottom: clamp(6px, 1.2vw, 10px);
+            display: flex;
+            align-items: center;
+            gap: clamp(6px, 1.2vw, 8px);
+            font-size: clamp(0.9rem, 2.2vw, 1.1rem);
+        }
+        
+        .rationale p {
+            color: #856404;
+            line-height: 1.6;
+            font-size: clamp(0.8rem, 1.8vw, 0.95rem);
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .stats {
+            display: flex;
+            gap: clamp(8px, 1.5vw, 15px);
+            justify-content: center;
+            margin-top: clamp(4px, 1vw, 10px);
+            flex-wrap: wrap;
+        }
+        
+        .stat {
+            background: rgba(255,255,255,0.2);
+            padding: clamp(5px, 1vw, 6px) clamp(8px, 1.8vw, 12px);
+            border-radius: 20px;
+            font-size: clamp(0.7rem, 1.6vw, 0.85rem);
+            white-space: nowrap;
+        }
+        
+        /* Cancel selection button */
+        .cancel-selection {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            margin: 0 auto clamp(10px, 2vw, 15px) auto;
+            display: none;
+        }
+        
+        .cancel-selection:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(231, 76, 60, 0.3);
+        }
+        
+        .cancel-selection.show {
+            display: flex;
+        }
+        
+        /* Study mode controls */
+        .study-controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .study-btn {
+            padding: 8px 16px;
+            border: 2px solid #6a11cb;
+            background: white;
+            color: #6a11cb;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .study-btn.active {
+            background: #6a11cb;
+            color: white;
+        }
+        
+        .study-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(106, 17, 203, 0.2);
+        }
+        
+        /* Multiple select instructions */
+        .multiple-select-instructions {
+            text-align: center;
+            color: #e74c3c;
+            font-weight: 500;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>👶 Postpartum Adaptations</h1>
+            <div class="subtitle">Chapter 15 - 30 Questions | Multiple-Select Enabled</div>
+            <div class="stats">
+                <div class="stat">🎯 30 Questions</div>
+                <div class="stat">📖 Detailed Rationales</div>
+                <div class="stat">🔢 2 Multiple-Answer Questions</div>
+                <div class="stat">↩️ Cancel Wrong Answers</div>
+            </div>
+        </div>
+        <div class="progress">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        
+        <div class="flashcard">
+            <div class="study-controls">
+                <button class="study-btn active" id="allQuestionsBtn" onclick="setStudyMode('all')">All Questions</button>
+                <button class="study-btn" id="multipleSelectBtn" onclick="setStudyMode('multiple')">Multiple-Select Only</button>
+                <button class="study-btn" id="singleSelectBtn" onclick="setStudyMode('single')">Single-Select Only</button>
+                <button class="study-btn" id="incorrectBtn" onclick="setStudyMode('incorrect')">Review Incorrect</button>
+            </div>
+            
+            <div class="question-container">
+                <div class="question-icon">?</div>
+                <div class="question" id="question"></div>
+                <div class="multiple-select-indicator" id="multipleSelectIndicator" style="display: none;">Multiple Answers</div>
+            </div>
+            
+            <div class="multiple-select-instructions" id="multipleSelectInstructions" style="display: none;">
+                💡 Select ALL correct answers - This question has multiple correct options
+            </div>
+            
+            <div class="options" id="options"></div>
+            
+            <!-- Cancel Selection Button - Only shows for wrong answers -->
+            <button class="btn cancel-selection" id="cancelBtn" onclick="cancelSelection()">
+                ↩️ Cancel Selection
+            </button>
+            
+            <div class="feedback" id="feedback">
+                <div class="feedback-icon" id="feedbackIcon"></div>
+                <div id="feedbackText"></div>
+            </div>
+            <div class="rationale" id="rationale">
+                <h4>💡 Rationale:</h4>
+                <p id="rationaleText"></p>
+            </div>
+        </div>
+        
+        <div class="navigation">
+            <button class="btn btn-secondary" id="prevBtn" onclick="previousCard()">
+                ⬅️ Previous
+            </button>
+            <div class="counter" id="counter">1/30</div>
+            <button class="btn btn-primary" id="nextBtn" onclick="nextCard()">
+                Next ➡️
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "1. A primipara client gave birth vaginally to a healthy newborn girl 12 hours ago. The nurse palpates the client's fundus. Which finding would the nurse identify as expected?",
+                options: [
+                    "two fingerbreadths above the umbilicus",
+                    "at the level of the umbilicus",
+                    "two fingerbreadths below the umbilicus",
+                    "four fingerbreadths below the umbilicus"
+                ],
+                correct: 1,
+                rationale: "During the first 12 hours postpartum, the fundus of the uterus is located at the level of the umbilicus. Over the first few days after birth, the uterus typically descends from the level of the umbilicus at a rate of 1 cm (one fingerbreadth) per day. By 3 days, the fundus lies two to three fingerbreadths below the umbilicus (or slightly higher in multiparous women). By the end of 10 days, the fundus usually cannot be palpated because it has descended into the true pelvis."
+            },
+            {
+                question: "2. When caring for a mother who has had a cesarean birth, the nurse would expect the client's lochia to be:",
+                options: [
+                    "greater than after a vaginal birth.",
+                    "about the same as after a vaginal birth.",
+                    "less than after a vaginal birth.",
+                    "saturated with clots and mucus."
+                ],
+                correct: 2,
+                rationale: "Women who have had cesarean births tend to have less flow because the uterine debris is removed manually along with delivery of the placenta."
+            },
+            {
+                question: "3. The nurse is developing a teaching plan for a client who has decided to bottle-feed her newborn. Which information would the nurse include in the teaching plan to facilitate suppression of lactation?",
+                options: [
+                    "encouraging the woman to manually express milk",
+                    "suggesting that she take frequent warm showers to soothe her breasts",
+                    "telling her to limit the amount of fluids that she drinks",
+                    "instructing her to apply ice packs to both breasts every other hour"
+                ],
+                correct: 3,
+                rationale: "If the woman is not breastfeeding, relief measures for engorgement include wearing a tight supportive bra 24 hours daily, applying ice to her breasts for approximately 15 to 20 minutes every other hour, and not stimulating her breasts by squeezing or manually expressing milk. Warm showers enhance the let-down reflex and would be appropriate if the woman was breastfeeding. Limiting fluid intake is inappropriate. Fluid intake is important for all postpartum women, regardless of the feeding method chosen."
+            },
+            {
+                question: "4. The nurse is making a follow-up home visit to a woman who is 12 days postpartum. Which finding would the nurse expect when assessing the client's fundus?",
+                options: [
+                    "cannot be palpated",
+                    "2 cm below the umbilicus",
+                    "6 cm below the umbilicus",
+                    "10 cm below the umbilicus"
+                ],
+                correct: 0,
+                rationale: "By the end of 10 days, the fundus usually cannot be palpated because it has descended into the true pelvis."
+            },
+            {
+                question: "5. A client who is breastfeeding her newborn tells the nurse, 'I notice that when I feed him, I feel fairly strong contraction-like pain. Labor is over. Why am I having contractions now?' Which response by the nurse would be most appropriate?",
+                options: [
+                    "'Your uterus is still shrinking in size; that's why you're feeling this pain.'",
+                    "'Let me check your vaginal discharge just to make sure everything is fine.'",
+                    "'Your body is responding to the events of labor, just like after a tough workout.'",
+                    "'The baby's sucking releases a hormone that causes the uterus to contract.'"
+                ],
+                correct: 3,
+                rationale: "The woman is describing afterpains, which are usually stronger during breastfeeding because oxytocin released by the sucking reflex strengthens uterine contractions. Afterpains are associated with uterine involution, but the woman's description strongly correlates with the hormonal events of breastfeeding. All women experience afterpains, but they are more acute in multiparous women secondary to repeated stretching of the uterine muscles."
+            },
+            {
+                question: "6. When the nurse is assessing a postpartum client approximately 6 hours after birth, which finding would warrant further investigation?",
+                options: [
+                    "deep red, fleshy-smelling lochia",
+                    "voiding of 350 cc",
+                    "blood pressure 90/50 mm Hg",
+                    "profuse sweating"
+                ],
+                correct: 2,
+                rationale: "In most instances of postpartum hemorrhage, blood pressure and cardiac output remain increased because of the compensatory increase in heart rate. Thus, a decrease in blood pressure and cardiac output are not expected changes during the postpartum period. Early identification is essential to ensure prompt intervention. Deep red, fleshy-smelling lochia is a normal finding 6 hours postpartum. Voiding in small amounts such as less than 150 cc would indicate a problem, but 350 cc would be appropriate. Profuse sweating also is normal during the postpartum period."
+            },
+            {
+                question: "7. A postpartum client who is bottle feeding her newborn asks, 'When should my period return?' Which response by the nurse would be most appropriate?",
+                options: [
+                    "'It's difficult to say, but it will probably return in about 2 to 3 weeks.'",
+                    "'It varies, but you can estimate it returning in about 7 to 9 weeks.'",
+                    "'You won't have to worry about it returning for at least 3 months.'",
+                    "'You don't have to worry about that now. It'll be quite a while.'"
+                ],
+                correct: 1,
+                rationale: "For the nonlactating woman, menstruation resumes 7 to 9 weeks after giving birth, with the first cycle being anovulatory. For the lactating woman, menses can return anytime from 2 to 18 months after birth."
+            },
+            {
+                question: "8. A nurse is providing care to a postpartum woman. The nurse determines that the client is in the taking-in phase based on which finding?",
+                options: [
+                    "The client states, 'He has my eyes and nose.'",
+                    "The client shows interest in caring for the newborn.",
+                    "The client performs self-care independently.",
+                    "The client confidently cares for the newborn."
+                ],
+                correct: 0,
+                rationale: "During the taking-in phase, new mothers when interacting with their newborns spend time claiming the newborn and touching him or her, commonly identifying specific features in the newborn such as 'he has my nose' or 'his fingers are long like his father's.' Independence in self-care and interest in caring for the newborn are typical of the taking-hold phase. Confidence in caring for the newborn is demonstrated during the letting-go phase."
+            },
+            {
+                question: "9. A nurse is observing the interaction between a new father and his newborn. The nurse determines that engrossment has yet to occur based on which behavior?",
+                options: [
+                    "demonstrates pleasure when touching or holding the newborn",
+                    "identifies imperfections in the newborn's appearance",
+                    "is able to distinguish his newborn from others in the nursery",
+                    "shows feelings of pride with the birth of the newborn"
+                ],
+                correct: 1,
+                rationale: "Identifying imperfections would not be associated with engrossment. Engrossment is characterized by seven behaviors: visual awareness of the newborn, tactile awareness of the newborn, perception of the newborn as perfect, strong attraction to the newborn, awareness of distinct features of the newborn, extreme elation, and increased sense of self-esteem."
+            },
+            {
+                question: "10. A postpartum client comes to the clinic for her 6-week postpartum checkup. When assessing the client's cervix, the nurse would expect the external cervical os to appear:",
+                options: [
+                    "shapeless.",
+                    "circular.",
+                    "triangular.",
+                    "slit-like."
+                ],
+                correct: 3,
+                rationale: "After birth, the external cervical os is no longer shaped like a circle but instead appears as a jagged slit-like opening, often described as a 'fish mouth.'"
+            },
+            {
+                question: "11. A nurse is teaching a postpartum client how to do muscle-clenching exercises for the perineum. The client asks the nurse, 'Why do I need to do these exercises?' Which reason would the nurse most likely incorporate into the response?",
+                options: [
+                    "reduces lochia",
+                    "promotes uterine involution",
+                    "improves pelvic floor tone",
+                    "alleviates perineal pain"
+                ],
+                correct: 2,
+                rationale: "Muscle clenching perineal exercises help to improve pelvic floor tone, strengthen perineal muscles, and promote healing, ultimately helping to prevent urinary incontinence later in life. Kegel exercises have no effect on lochia, involution, or pain."
+            },
+            {
+                question: "12. A father of a newborn tells the nurse, 'I may not know everything about being a dad, but I'm going to do the best I can for my son.' The nurse interprets this as indicating the father is in which stage of adaptation?",
+                options: [
+                    "expectations",
+                    "transition to mastery",
+                    "reality",
+                    "taking-in"
+                ],
+                correct: 1,
+                rationale: "The father's statement reflects transition to mastery because he is making a conscious decision to take control and be at the center of the newborn's life regardless of his preparedness. The expectations stage involves preconceptions about how life will be with a newborn. Reality occurs when fathers realize their expectations are not realistic. Taking-in is a phase of maternal adaptation."
+            },
+            {
+                question: "13. A postpartum client is experiencing subinvolution. When reviewing the woman's labor and birth history, which factor would the nurse identify as being a significant contributor to this condition?",
+                options: [
+                    "early ambulation",
+                    "short duration of labor",
+                    "breastfeeding",
+                    "use of anesthetics"
+                ],
+                correct: 3,
+                rationale: "Factors that inhibit involution include prolonged labor and difficult birth, incomplete expulsion of amniotic membranes and placenta, uterine infection, overdistention of uterine muscles (such as by multiple gestation, hydramnios, or large singleton fetus), full bladder (which displaces the uterus and interferes with contractions), anesthesia (which relaxes uterine muscles), and close childbirth spacing. Factors that facilitate uterine involution include complete expulsion of amniotic membranes and placenta at birth, complication-free labor and birth process, breastfeeding, and early ambulation."
+            },
+            {
+                question: "14. A woman who gave birth 24 hours ago tells the nurse, 'I've been urinating so much over the past several hours.' Which response by the nurse would be most appropriate?",
+                options: [
+                    "'You must have an infection, so let me get a urine specimen.'",
+                    "'Your body is undergoing many changes that cause your bladder to fill quickly.'",
+                    "'Your uterus is not contracting as quickly as it should.'",
+                    "'The anesthesia that you received is wearing off and your bladder is working again.'"
+                ],
+                correct: 1,
+                rationale: "Postpartum diuresis occurs as a result of several mechanisms: the large amounts of IV fluids given during labor, a decreasing antidiuretic effect of oxytocin as its level declines, the buildup and retention of extra fluids during pregnancy, and a decreasing production of aldosterone—the hormone that decreases sodium retention and increases urine production. All these factors contribute to rapid filling of the bladder within 12 hours of birth. Diuresis begins within 12 hours after childbirth and continues throughout the first week postpartum."
+            },
+            {
+                question: "15. The nurse develops a teaching plan for a postpartum client and includes teaching about how to perform pelvic floor muscle training or Kegel exercises. The nurse includes this information for which reason?",
+                options: [
+                    "reduce lochia",
+                    "promote uterine involution",
+                    "improve pelvic floor tone",
+                    "alleviate perineal pain"
+                ],
+                correct: 2,
+                rationale: "Pelvic floor muscle training or Kegel exercises help to improve pelvic floor tone, strengthen perineal muscles, and promote healing, ultimately helping to prevent urinary incontinence later in life. Kegel exercises have no effect on lochia, involution, or pain."
+            },
+            {
+                question: "16. When assessing a postpartum woman, the nurse suspects the woman is experiencing a problem based on which finding?",
+                options: [
+                    "elevated white blood cell count",
+                    "acute decrease in hematocrit",
+                    "increased levels of clotting factors",
+                    "pulse rate of 60 beats/minute"
+                ],
+                correct: 1,
+                rationale: "Despite a decrease in blood volume after birth, hematocrit levels remain relatively stable and may even increase. An acute decrease is not an expected finding. Red blood cell production ceases early in the puerperium, causing mean hemoglobin and hematocrit levels to decrease slightly in the first 24 hours. During the next 2 weeks, both levels rise slowly. The white blood count, which increases in labor, remains elevated for first 4 to 6 days after birth but then falls to 6,000 to 10,000/mm3. The WBC count remains elevated for the first 4 to 6 days and clotting factors remain elevated for 2 to 3 weeks. Bradycardia (50 to 70 beats per minute) for the first two weeks reflects the decrease in cardiac output. The increase in cardiac output and stroke volume during pregnancy begins to diminish after birth once the placenta has been delivered. This decrease in cardiac output is reflected in bradycardia (40 to 60 bpm) for up to the first 2 weeks postpartum."
+            },
+            {
+                question: "17. A nurse is teaching a new mother about breastfeeding. The nurse determines that the teaching was successful when the woman identifies which hormone as responsible for milk let-down?",
+                options: [
+                    "prolactin",
+                    "estrogen",
+                    "progesterone",
+                    "oxytocin"
+                ],
+                correct: 3,
+                rationale: "Oxytocin is released from the posterior pituitary to promote milk let-down. Prolactin levels increase at term with a decrease in estrogen and progesterone; estrogen and progesterone levels decrease after the placenta is delivered. Prolactin is released from the anterior pituitary gland and initiates milk production."
+            },
+            {
+                question: "18. A nurse is making a home visit to a postpartum woman who gave birth to a healthy newborn 4 days ago. The woman's breasts are swollen, hard, and tender to the touch. The nurse documents this finding as:",
+                options: [
+                    "involution.",
+                    "engorgement.",
+                    "mastitis.",
+                    "engrossment."
+                ],
+                correct: 1,
+                rationale: "Engorgement is the process of swelling of the breast tissue as a result of an increase in blood and lymph supply as a precursor to lactation. Breast engorgement usually peaks in 3 to 5 days postpartum and usually subsides within the next 24 to 36 hours. Engorgement can occur from infrequent feeding or ineffective emptying of the breasts and typically lasts about 24 hours. Breasts increase in vascularity and swell in response to prolactin 2 to 4 days after birth. If engorged, the breasts will be hard and tender to touch. Involution refers to the process of the uterus returning to its prepregnant state. Mastitis refers to an infection of the breasts. Engrossment refers to the bond that develops between the father and the newborn."
+            },
+            {
+                question: "19. A nurse is assessing a postpartum woman's adjustment to her maternal role. Which event would the nurse expect to occur first?",
+                options: [
+                    "reestablishing relationships with others",
+                    "demonstrating increasing confidence in care of the newborn",
+                    "assuming a passive role in meeting her own needs",
+                    "becoming preoccupied with the present"
+                ],
+                correct: 2,
+                rationale: "The first task of adjusting to the maternal role is the taking-in phase in which the mother demonstrates dependent behaviors and assumes a passive role in meeting own basic needs. During the taking-hold phase, the mother becomes preoccupied with the present. During the letting-go phase, the mother reestablishes relationships with others and demonstrates increased responsibility and confidence in caring for the newborn."
+            },
+            {
+                question: "20. The partner of a woman who has given birth to a healthy newborn says to the nurse, 'I want to be involved, but I'm not sure that I'm able to care for such a little baby.' The nurse interprets this as indicating which stage?",
+                options: [
+                    "expectations",
+                    "reality",
+                    "transition to mastery",
+                    "taking-hold"
+                ],
+                correct: 1,
+                rationale: "The partner's statement reflects stage 2 (reality), which occurs when fathers or partners realize that their expectations in stage 1 are not realistic. Their feelings change from elation to sadness, ambivalence, jealousy, and frustration. Many wish to be more involved in the newborn's care and yet do not feel prepared to do so. New fathers or partners pass through stage 1 (expectations) with preconceptions about what home life will be like with a newborn. Many men may be unaware of the dramatic changes that can occur when this newborn comes home to live with them. In stage 3 (transition to mastery), the father or partner makes a conscious decision to take control and be at the center of his newborn's life regardless of his preparedness. Taking-hold is a stage of maternal adaptation."
+            },
+            {
+                question: "21. A nurse is reviewing information about maternal and paternal adaptations to the birth of a newborn. The nurse observes the parents interacting with their newborn physically and emotionally. The nurse documents this as:",
+                options: [
+                    "puerperium.",
+                    "lactation.",
+                    "attachment.",
+                    "engrossment."
+                ],
+                correct: 2,
+                rationale: "Attachment is a formation of a relationship between a parent and her/his newborn through a process of physical and emotional interactions. Puerperium refers to the postpartum period. Lactation refers to the process of milk secretion by the breasts. Engrossment refers to the bond that develops between the father and the newborn."
+            },
+            {
+                question: "22. The nurse is providing an in-service education program to a group of home health care nurses who provide care to postpartum women. After teaching the group about the process of involution, the nurse determines that additional teaching is needed when the group identifies which process as being involved?",
+                options: [
+                    "catabolism",
+                    "muscle fiber contraction",
+                    "epithelial regeneration",
+                    "vasodilation"
+                ],
+                correct: 3,
+                rationale: "Involution involves three retrogressive processes: contraction of muscle fibers to reduce those previously stretched during pregnancy; catabolism, which reduces enlarged myometrial cells; and regeneration of uterine epithelium from the lower layer of the deciduas after the upper layers have been sloughed off and shed during lochial discharge. Vasodilation is not involved."
+            },
+            {
+                question: "23. A nurse is visiting a postpartum woman who gave birth to a healthy newborn 5 days ago. Which finding would the nurse expect?",
+                options: [
+                    "bright red discharge",
+                    "pinkish brown discharge",
+                    "deep red mucus-like discharge",
+                    "creamy white discharge"
+                ],
+                correct: 1,
+                rationale: "Lochia serosa is pinkish brown and is expelled 3 to 10 days postpartum. Lochia rubra is a deep-red mixture of mucus, tissue debris, and blood that occurs for the first 3 to 4 days after birth. Lochia alba is creamy white or light brown and consists of leukocytes, decidual tissue, and reduced fluid content and occurs from days 10 to 14 but can last 3 to 6 weeks postpartum."
+            },
+            {
+                question: "24. A nurse teaches a postpartum woman about her risk for thromboembolism. The nurse determines that additional teaching is required when the woman identifies which as a factor that increases her risk?",
+                options: [
+                    "increase in clotting factors",
+                    "vessel damage",
+                    "immobility",
+                    "increase in red blood cell production"
+                ],
+                correct: 3,
+                rationale: "Clotting factors that increased during pregnancy tend to remain elevated during the early postpartum period. Giving birth stimulates this hypercoagulability state further. As a result, these coagulation factors remain elevated for 2 to 3 weeks postpartum. This hypercoagulable state, combined with vessel damage during birth and immobility, places the woman at risk for thromboembolism (blood clots) in the lower extremities and the lungs. Red blood cell production ceases early in the puerperium, which leads to mean hemoglobin and hematocrit levels to decrease slightly in the first 24 hours and then rise slowly over the next 2 weeks."
+            },
+            {
+                question: "25. A nurse is preparing a presentation about changes in the various body systems during the postpartum period and their effects for a group of new mothers. The nurse explains which event as influencing a postpartum woman's ability to void? Select all that apply.",
+                options: [
+                    "use of an opioid anesthetic during labor",
+                    "generalized swelling of the perineum",
+                    "decreased bladder tone from regional anesthesia",
+                    "use of oxytocin to augment labor",
+                    "need for an episiotomy"
+                ],
+                correct: [1, 2, 3],
+                rationale: "Many women have difficulty feeling the sensation to void after giving birth if they received an anesthetic block during labor (which inhibits neural functioning of the bladder) or if they received oxytocin to induce or augment their labor (antidiuretic effect). These women will be at risk for incomplete emptying, bladder distention, difficulty voiding, and urinary retention. In addition, urination may be impeded by perineal lacerations; generalized swelling and bruising of the perineum and tissues surrounding the urinary meatus; hematomas; decreased bladder tone as a result of regional anesthesia; and diminished sensation of bladder pressure as a result of swelling, poor bladder tone, and numbing effects of regional anesthesia used during labor."
+            },
+            {
+                question: "26. A postpartum woman who has experienced diastasis recti asks the nurse about what to expect related to this condition. Which response by the nurse would be most appropriate?",
+                options: [
+                    "'You'll notice that this will fade to silvery lines.'",
+                    "'Exercise will help to improve the muscles.'",
+                    "'Expect the color to lighten somewhat.'",
+                    "'You'll notice that your shoe size will increase.'"
+                ],
+                correct: 1,
+                rationale: "Separation of the rectus abdominis muscles, called diastasis recti, is more common in women who have poor abdominal muscle tone before pregnancy. After birth, muscle tone is diminished and the abdominal muscles are soft and flabby. Specific exercises are necessary to help the woman regain muscle tone. Fortunately, diastasis responds well to exercise, and abdominal muscle tone can be improved. Stretch marks (striae gravidarum) fade to silvery lines. The darkened pigmentation of the abdomen (linea nigra), face (melasma), and nipples gradually fades. Parous women will note a permanent increase in shoe size."
+            },
+            {
+                question: "27. As part of an education program for a group of pregnant women, the nurse teaches them about the changes that occur in the respiratory system during the postpartum period. The women demonstrate understanding of the information when they identify which occurrence as a postpartum adaptation?",
+                options: [
+                    "continued shortness of breath",
+                    "relief of rib aching",
+                    "diaphragmatic elevation",
+                    "decrease in respiratory rate"
+                ],
+                correct: 1,
+                rationale: "Respirations usually remain within the normal adult range of 16 to 24 breaths per minute. As the abdominal organs resume their nonpregnant position, the diaphragm returns to its usual position. Anatomic changes in the thoracic cavity and rib cage caused by increasing uterine growth resolve quickly. As a result, discomforts such as shortness of breath and rib aches are relieved."
+            },
+            {
+                question: "28. A woman who gave birth to a healthy newborn several hours ago asks the nurse, 'Why am I perspiring so much?' The nurse integrates knowledge that a decrease in which hormone plays a role in this occurrence?",
+                options: [
+                    "estrogen",
+                    "hCG",
+                    "hPL",
+                    "progesterone"
+                ],
+                correct: 0,
+                rationale: "Although hCG, hPL, and progesterone decline rapidly after birth, decreased estrogen levels are associated with breast engorgement and with the diuresis of excess extracellular fluid accumulated during pregnancy."
+            },
+            {
+                question: "29. A primipara client gave birth vaginally to a healthy newborn girl 48 hours ago. The nurse palpates the client's fundus and documents which finding as normal?",
+                options: [
+                    "two fingerbreadths above the umbilicus",
+                    "at the level of the umbilicus",
+                    "two fingerbreadths below the umbilicus",
+                    "four fingerbreadths below the umbilicus"
+                ],
+                correct: 2,
+                rationale: "During the first few days after birth, the uterus typically descends downward from the level of the umbilicus at a rate of 1 cm (1 fingerbreadth) per day so that by day 2, it is about 2 fingerbreadths below the umbilicus."
+            },
+            {
+                question: "30. A nurse is providing care to a woman of Latin American culture who delivered a healthy neonate 6 hours ago. When developing a plan of care that is culturally congruent for this client, which information would be important for the nurse to obtain initially? Select all that apply.",
+                options: [
+                    "Meanings associated with touch and gestures",
+                    "Woman's beliefs about the postpartum period",
+                    "Plans for care of the newborn after discharge",
+                    "Amount of help the partner is expected to provide",
+                    "Preferences for measures to relieve discomforts"
+                ],
+                correct: [0, 1, 3, 4],
+                rationale: "Although childbirth and the postpartum period are unique experiences for each woman, how the woman perceives and makes meaning of them is culturally defined. Nurses caring for childbearing families should consider all aspects of culture, including health beliefs, communication, space, and family roles. To ensure culturally congruent care, the nurse needs to gather initial information about the woman's health beliefs about the postpartum period because different cultures view the postpartum period differently, such as the need to balance hot and cold substances. This belief can influence the woman's preferences for relieving discomforts. The meaning of touch and gestures is also important to determine. The concept of personal space and the dimensions of comfort zones differ from culture to culture. Nurses must be sensitive to how people respond when being touched and should refrain from touching if the client's response indicates it is unwelcome. In addition, cultural norms also have an impact on family roles, expectations, and behaviors associated with a member's position in the family. For example, culture may influence whether a male partner actively participates in the woman's pregnancy and childbirth. In the Western countries, partners are expected to be involved, but this role expectation may conflict with that of many of the diverse groups now living in the countries. Plans for care of the newborn can be addressed at a later time."
+            }
+        ];
+
+        let currentQuestion = 0;
+        let selectedOption = null;
+        let score = 0;
+        let answers = Array(questions.length).fill(null);
+        let incorrectQuestions = [];
+        let studyMode = 'all'; // 'all', 'multiple', 'single', 'incorrect'
+        let filteredQuestions = [...questions];
+
+        function setStudyMode(mode) {
+            studyMode = mode;
+            
+            // Update button states
+            document.querySelectorAll('.study-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById(mode + 'Btn').classList.add('active');
+            
+            // Filter questions based on mode
+            switch(mode) {
+                case 'all':
+                    filteredQuestions = [...questions];
+                    break;
+                case 'multiple':
+                    filteredQuestions = questions.filter(q => Array.isArray(q.correct) && q.correct.length > 1);
+                    break;
+                case 'single':
+                    filteredQuestions = questions.filter(q => !Array.isArray(q.correct) || q.correct.length === 1);
+                    break;
+                case 'incorrect':
+                    filteredQuestions = questions.filter((_, index) => incorrectQuestions.includes(index));
+                    if (filteredQuestions.length === 0) {
+                        alert('No incorrect questions to review yet!');
+                        filteredQuestions = [...questions];
+                    }
+                    break;
+            }
+            
+            currentQuestion = 0;
+            loadQuestion();
+        }
+
+        function isMultipleSelectQuestion(question) {
+            return Array.isArray(question.correct) && question.correct.length > 1;
+        }
+
+        function loadQuestion() {
+            if (filteredQuestions.length === 0) {
+                document.getElementById('question').textContent = "No questions available for the selected study mode.";
+                document.getElementById('options').innerHTML = '';
+                document.getElementById('counter').textContent = `0/0`;
+                return;
+            }
+
+            const question = filteredQuestions[currentQuestion];
+            const originalIndex = questions.indexOf(question);
+            
+            document.getElementById('question').textContent = question.question;
+            document.getElementById('counter').textContent = `${currentQuestion + 1}/${filteredQuestions.length}`;
+            
+            // Update progress bar
+            const progress = ((currentQuestion + 1) / filteredQuestions.length) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+            
+            // Show/hide multiple select indicators
+            const isMultiple = isMultipleSelectQuestion(question);
+            document.getElementById('multipleSelectIndicator').style.display = isMultiple ? 'block' : 'none';
+            document.getElementById('multipleSelectInstructions').style.display = isMultiple ? 'block' : 'none';
+            
+            // Load options
+            const optionsContainer = document.getElementById('options');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option';
+                optionElement.innerHTML = `
+                    <div class="option-letter">${String.fromCharCode(65 + index)}</div>
+                    <div class="option-text">${option}</div>
+                `;
+                optionElement.onclick = () => selectOption(index);
+                optionsContainer.appendChild(optionElement);
+            });
+            
+            // Reset feedback and rationale
+            document.getElementById('feedback').className = 'feedback';
+            document.getElementById('feedback').style.display = 'none';
+            document.getElementById('rationale').className = 'rationale';
+            
+            // Update navigation buttons
+            document.getElementById('prevBtn').disabled = currentQuestion === 0;
+            document.getElementById('nextBtn').textContent = currentQuestion === filteredQuestions.length - 1 ? 'Finish ➡️' : 'Next ➡️';
+            
+            // Check if we have a stored answer for this question
+            const storedAnswer = answers[originalIndex];
+            document.getElementById('nextBtn').disabled = storedAnswer === null || storedAnswer === undefined;
+            
+            // Reset cancel button visibility
+            document.getElementById('cancelBtn').classList.remove('show');
+            
+            // If this question was already answered, show the answer
+            if (storedAnswer !== null && storedAnswer !== undefined) {
+                if (Array.isArray(storedAnswer)) {
+                    // Multiple selection question
+                    storedAnswer.forEach(index => {
+                        selectOption(index, true);
+                    });
+                } else {
+                    // Single selection question
+                    selectOption(storedAnswer, true);
+                }
+            }
+        }
+
+        function selectOption(index, fromMemory = false) {
+            const question = filteredQuestions[currentQuestion];
+            const originalIndex = questions.indexOf(question);
+            
+            // Check if this is a multiple selection question
+            if (isMultipleSelectQuestion(question)) {
+                // Multiple selection logic
+                if (!fromMemory) {
+                    if (!answers[originalIndex]) {
+                        answers[originalIndex] = [];
+                    }
+                    
+                    const optionIndex = answers[originalIndex].indexOf(index);
+                    if (optionIndex === -1) {
+                        answers[originalIndex].push(index);
+                    } else {
+                        answers[originalIndex].splice(optionIndex, 1);
+                    }
+                }
+                
+                highlightSelectedOptions();
+                showFeedbackForMultiple();
+                
+                // Enable next button if at least one option is selected
+                document.getElementById('nextBtn').disabled = !answers[originalIndex] || answers[originalIndex].length === 0;
+                return;
+            }
+            
+            // Single selection logic
+            if (selectedOption !== null && !fromMemory) return;
+            
+            if (!fromMemory) {
+                selectedOption = index;
+                answers[originalIndex] = index;
+            }
+            
+            highlightSelectedOption(index);
+            showFeedback(index);
+            
+            // Enable next button
+            document.getElementById('nextBtn').disabled = false;
+        }
+
+        function highlightSelectedOption(index) {
+            const options = document.querySelectorAll('.option');
+            const question = filteredQuestions[currentQuestion];
+            const originalIndex = questions.indexOf(question);
+            
+            options.forEach((option, i) => {
+                option.classList.remove('correct', 'incorrect');
+                
+                if (i === index) {
+                    // ALWAYS show correct answers in GREEN
+                    if (i === question.correct) {
+                        option.classList.add('correct');
+                        if (!answers[originalIndex]) score++;
+                        document.getElementById('cancelBtn').classList.remove('show');
+                        
+                        // Remove from incorrect questions if it was there
+                        const incorrectIndex = incorrectQuestions.indexOf(originalIndex);
+                        if (incorrectIndex > -1) {
+                            incorrectQuestions.splice(incorrectIndex, 1);
+                        }
+                    } else {
+                        // ALWAYS show incorrect answers in RED
+                        option.classList.add('incorrect');
+                        // Also highlight the correct answer in GREEN
+                        options[question.correct].classList.add('correct');
+                        document.getElementById('cancelBtn').classList.add('show');
+                        
+                        // Add to incorrect questions
+                        if (!incorrectQuestions.includes(originalIndex)) {
+                            incorrectQuestions.push(originalIndex);
+                        }
+                    }
+                }
+            });
+        }
+
+        function highlightSelectedOptions() {
+            const options = document.querySelectorAll('.option');
+            const question = filteredQuestions[currentQuestion];
+            const originalIndex = questions.indexOf(question);
+            const selectedIndices = answers[originalIndex] || [];
+            
+            // First, highlight ALL correct answers in GREEN
+            question.correct.forEach(correctIndex => {
+                options[correctIndex].classList.add('correct');
+            });
+            
+            // Then, highlight selected options
+            options.forEach((option, i) => {
+                if (selectedIndices.includes(i)) {
+                    // If selected but incorrect, highlight in RED
+                    if (!question.correct.includes(i)) {
+                        option.classList.add('incorrect');
+                    }
+                }
+            });
+            
+            // Check if answer is correct and update score/tracking
+            const allCorrectSelected = question.correct.every(c => selectedIndices.includes(c));
+            const noIncorrectSelected = selectedIndices.every(s => question.correct.includes(s));
+            
+            if (allCorrectSelected && noIncorrectSelected) {
+                if (!answers[originalIndex]) score++;
+                // Remove from incorrect questions
+                const incorrectIndex = incorrectQuestions.indexOf(originalIndex);
+                if (incorrectIndex > -1) {
+                    incorrectQuestions.splice(incorrectIndex, 1);
+                }
+            } else {
+                // Add to incorrect questions
+                if (!incorrectQuestions.includes(originalIndex)) {
+                    incorrectQuestions.push(originalIndex);
+                }
+            }
+        }
+
+        function cancelSelection() {
+            const question = filteredQuestions[currentQuestion];
+            const originalIndex = questions.indexOf(question);
+            
+            selectedOption = null;
+            answers[originalIndex] = null;
+            
+            const options = document.querySelectorAll('.option');
+            options.forEach(option => {
+                option.classList.remove('correct', 'incorrect');
+            });
+            
+            document.getElementById('feedback').style.display = 'none';
+            document.getElementById('rationale').classList.remove('show');
+            document.getElementById('cancelBtn').classList.remove('show');
+            document.getElementById('nextBtn').disabled = true;
+        }
+
+        function showFeedback(index) {
+            const question = filteredQuestions[currentQuestion];
+            const feedback = document.getElementById('feedback');
+            const feedbackIcon = document.getElementById('feedbackIcon');
+            const feedbackText = document.getElementById('feedbackText');
+            const rationale = document.getElementById('rationale');
+            const rationaleText = document.getElementById('rationaleText');
+            
+            if (index === question.correct) {
+                feedback.className = 'feedback correct';
+                feedbackIcon.textContent = '✅';
+                feedbackText.textContent = 'Correct! Well done.';
+            } else {
+                feedback.className = 'feedback incorrect';
+                feedbackIcon.textContent = '❌';
+                feedbackText.textContent = `Incorrect. The right answer is: ${String.fromCharCode(65 + question.correct)}`;
+            }
+            
+            feedback.style.display = 'flex';
+            rationaleText.textContent = question.rationale;
+            rationale.classList.add('show');
+        }
+
+        function showFeedbackForMultiple() {
+            const question = filteredQuestions[currentQuestion];
+            const originalIndex = questions.indexOf(question);
+            const feedback = document.getElementById('feedback');
+            const feedbackIcon = document.getElementById('feedbackIcon');
+            const feedbackText = document.getElementById('feedbackText');
+            const rationale = document.getElementById('rationale');
+            const rationaleText = document.getElementById('rationaleText');
+            
+            const selectedIndices = answers[originalIndex] || [];
+            const allCorrectSelected = question.correct.every(c => selectedIndices.includes(c));
+            const noIncorrectSelected = selectedIndices.every(s => question.correct.includes(s));
+            
+            if (allCorrectSelected && noIncorrectSelected) {
+                feedback.className = 'feedback correct';
+                feedbackIcon.textContent = '✅';
+                feedbackText.textContent = 'Correct! All right answers selected.';
+            } else {
+                feedback.className = 'feedback incorrect';
+                feedbackIcon.textContent = '❌';
+                const correctLetters = question.correct.map(c => String.fromCharCode(65 + c)).join(', ');
+                feedbackText.textContent = `Incorrect. The right answers are: ${correctLetters}`;
+            }
+            
+            feedback.style.display = 'flex';
+            rationaleText.textContent = question.rationale;
+            rationale.classList.add('show');
+        }
+
+        function nextCard() {
+            if (currentQuestion < filteredQuestions.length - 1) {
+                currentQuestion++;
+                selectedOption = null;
+                loadQuestion();
+            } else {
+                const correctCount = questions.reduce((count, question, index) => {
+                    if (answers[index] === null || answers[index] === undefined) return count;
+                    
+                    if (Array.isArray(question.correct)) {
+                        const selected = answers[index] || [];
+                        const allCorrect = question.correct.every(c => selected.includes(c));
+                        const noIncorrect = selected.every(s => question.correct.includes(s));
+                        return allCorrect && noIncorrect ? count + 1 : count;
+                    } else {
+                        return answers[index] === question.correct ? count + 1 : count;
+                    }
+                }, 0);
+                
+                alert(`Quiz completed! Your score: ${correctCount}/${questions.length}\nIncorrect questions: ${incorrectQuestions.length}`);
+                
+                if (studyMode === 'incorrect' && incorrectQuestions.length > 0) {
+                    // Continue with incorrect questions
+                    filteredQuestions = questions.filter((_, index) => incorrectQuestions.includes(index));
+                    currentQuestion = 0;
+                    loadQuestion();
+                } else {
+                    // Reset to all questions
+                    currentQuestion = 0;
+                    selectedOption = null;
+                    score = 0;
+                    answers = Array(questions.length).fill(null);
+                    filteredQuestions = [...questions];
+                    setStudyMode('all');
+                }
+            }
+        }
+
+        function previousCard() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                const question = filteredQuestions[currentQuestion];
+                const originalIndex = questions.indexOf(question);
+                selectedOption = answers[originalIndex];
+                loadQuestion();
+            }
+        }
+
+        // Initialize the app
+        loadQuestion();
+    </script>
+</body>
+</html>
